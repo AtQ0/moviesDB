@@ -246,9 +246,9 @@ img {
             @keydown.enter="getMovieBySearching" />
 
         <div class="error-container">
-            <p :style={ visibility: }>*Heeey</p>
+            <p>*Heeey</p>
         </div>
-        <button class="search-button" @click=" getMovieBySearching ">SEARCH</button>
+        <button class="search-button" @click="getMovieBySearching">SEARCH</button>
     </div>
 
     <!--GENERATED API DATA-->
@@ -257,7 +257,7 @@ img {
             <div class="image-container-for-each-movie">
 
                 <!--Show movie poster if existing-->
-                <img v-if=" movie.poster_path !== null " :src=" this.baseImageUrl + movie.poster_path " alt="Movie Poster">
+                <img v-if="movie.poster_path !== null" :src="this.baseImageUrl + movie.poster_path" alt="Movie Poster">
 
                 <!--Show generic movie poster if poster is missing-->
                 <img v-else src="../../assets/images/missingMovie.jpg" alt="">
