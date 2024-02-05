@@ -1,22 +1,30 @@
 <script>
+// Import the Axios library, downloaded by npm
+import axios from 'axios';
+
 export default {
+
+
 
     data() {
         return {
-            apiKey: "8412a2bb",
+            apiKey: "1a31fa90d843040a3cdee6b110b0fe4a",
             pageTitleVue: 'Vue',
-            pageTitleMovieDb: 'Movies Database',
+            pageTitleMovieDb: 'Movie Database',
             pageIntroParagraph: 'FIND GOOD MOVIES AND SERIES TO WATCH',
             movieImage: "/assets/images/background.jpg",
             moviePlot: null,
             searchInputValue: "",
             movies: null,
             isPageReloaded: true,
+            baseImageUrl: 'https://image.tmdb.org/t/p/w500',
         }
     },
     created() {
 
         this.getMovieBySearching();
+
+        this.getGenres();
     },
     computed: {
 
@@ -27,33 +35,51 @@ export default {
 
         getMovieBySearching() {
 
+            //Get api-data on page reload
             if (this.isPageReloaded === true) {
 
-                const movieDataInfoByTitleQueryLink = `http://www.omdbapi.com/?apikey=${this.apiKey}&s=Batman`;
-                fetch(movieDataInfoByTitleQueryLink)
-                    .then((response) => response.json())
-                    .then((result) => {
-                        this.movies = result.Search;
+                //Fetch movies on start of page reload, using Axios
+                axios.get(`https://api.themoviedb.org/3/search/movie?query=batman&api_key=${this.apiKey}`)
+                    .then((response) => {
+                        this.movies = response.data.results;
+                        console.log(this.movies)
                         this.isPageReloaded = false;
                     })
+
+
             }
             else if (this.isPageReloaded === false && this.searchInputValue === "") {
                 alert("input field is empty")
             }
-            else if (this.searchInputValue.length > 0 && this.searchInputValue.length < 3) {
-                alert("Please type in at least three characters")
-                this.searchInputValue = "";
-            }
+            //get api-data on btn-click
             else {
 
-                const movieDataInfoByTitleQueryLink = `http://www.omdbapi.com/?apikey=${this.apiKey}&s=${this.searchInputValue}`;
-                fetch(movieDataInfoByTitleQueryLink)
-                    .then((response) => response.json())
-                    .then((result) => {
-                        this.movies = result.Search;
+                //Fetch movies on btn-click, using Axios
+                axios.get(`https://api.themoviedb.org/3/search/movie?query=${this.searchInputValue}&api_key=${this.apiKey}`)
+                    .then((response) => {
+                        this.movies = response.data.results;
+                        console.log(this.movies)
                         this.searchInputValue = "";
                     })
             }
+        },
+
+        //Method that cuts off overview efter certain length and before space
+        truncateOverview(overview, maxLength) {
+            if (overview.length > maxLength) {
+                const truncatedText = overview.slice(0, maxLength);
+                const lastSpaceIndex = truncatedText.lastIndexOf(' ');
+
+                return lastSpaceIndex !== -1
+                    ? truncatedText.slice(0, lastSpaceIndex) + '...'
+                    : truncatedText + '...';
+            }
+            return overview;
+        },
+
+        //method that gets genres names based on genre id's
+        getGenres(incomingGenreIds) {
+            return "yes";
         }
     },
 
@@ -138,7 +164,7 @@ img {
 }
 
 .search-button {
-    margin-top: 25px;
+    margin-top: 15px;
     margin-bottom: 40px;
     height: 30px;
     width: 130px;
@@ -164,54 +190,87 @@ img {
 
 .movie-wrapper {
     width: 300px;
-    height: 550px;
-    border: #67AD7C 2px solid;
-    border-radius: 16px;
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding-left: 20px;
-    padding-right: 20px;
-    text-align: center;
-    padding-bottom: 30px;
 }
 
 .image-container-for-each-movie {
-    margin-top: 40px;
-    width: 80%;
-    object-fit: cover;
-    border-radius: 16px;
+    border-radius: 26px;
+    border: solid black 1px;
     overflow: hidden;
+    height: fit-content;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1px;
+}
+
+.image-container-for-each-movie img {
+    border-radius: 26px;
+}
+
+.movie-wrapper h4 {
+    width: fit-content;
+    margin-bottom: 0;
+}
+
+.movie-wrapper p {
+    margin-top: 0;
+}
+
+
+
+.error-container {
+    height: 20px;
+    width: 80px;
+    background-color: orange;
+    visibility: hidden;
+}
+
+.error-container p {
+    margin: 0;
 }
 </style>
 
 
 <template>
+    <!--Nav/menu-->
     <div class="container">
         <h1><span class="vue-part-of-title">{{ pageTitleVue }}</span><span class="last-part-of-title">{{ pageTitleMovieDb
         }}</span></h1>
         <div class="image-container">
             <p class="pageIntroParagraph"><b>{{ pageIntroParagraph }}</b></p>
             <img :src="movieImage" />
-            <div class="intro-floating-description">
-                <p>{{ moviePlot }}</p>
-            </div>
         </div>
-        <input class="movieTitleInput" type="text" placeholder="what are you looking for?" v-model="searchInputValue" />
-        <button class="search-button" @click="getMovieBySearching">SEARCH</button>
-    </div>
-    <div class="content-container">
-        <div v-for="movie in movies" class="movie-wrapper">
-            <div class="image-container-for-each-movie">
-                <img :src="movie.Poster" alt="Movie Poster">
-            </div>
-            <h2>{{ movie.Title }}</h2>
-            <p>Year: {{ movie.Year }}</p>
-            <p>ID: {{ movie.imdbID }}</p>
-            <p>Type: {{ movie.Type }}</p>
+        <input class="movieTitleInput" type="text" placeholder="what are you looking for?" v-model="searchInputValue"
+            @keydown.enter="getMovieBySearching" />
 
+        <div class="error-container">
+            <p :style={ visibility: }>*Heeey</p>
+        </div>
+        <button class="search-button" @click=" getMovieBySearching ">SEARCH</button>
+    </div>
+
+    <!--GENERATED API DATA-->
+    <div class="content-container">
+        <div v-for=" movie  in  movies " class="movie-wrapper">
+            <div class="image-container-for-each-movie">
+
+                <!--Show movie poster if existing-->
+                <img v-if=" movie.poster_path !== null " :src=" this.baseImageUrl + movie.poster_path " alt="Movie Poster">
+
+                <!--Show generic movie poster if poster is missing-->
+                <img v-else src="../../assets/images/missingMovie.jpg" alt="">
+
+            </div>
+            <h2>{{ movie.title }} ({{ movie.release_date.slice(0, -6) }})</h2>
+            <h4>Synopsis</h4>
+            <p>
+                {{ truncateOverview(movie.overview, 210) }}
+
+            </p>
+
+            <p><b>Genre:</b> {{ this.getGenres(movie.genre_ids) }}</p>
         </div>
     </div>
 </template>
