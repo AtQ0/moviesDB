@@ -93,7 +93,7 @@ export default {
 
 
 
-<style>
+<style scoped>
 body {
     background-color: #303A48;
     display: flex;
