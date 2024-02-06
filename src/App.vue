@@ -1,13 +1,23 @@
 <script>
-import Movies from './components/Movies.vue'
+import { RouterLink } from 'vue-router';
+import Navbar from './components/Navbar.vue'
+import Trending from './components/Trending.vue'
+import SearchByTitle from './components/SearchByTitle.vue'
+
 
 export default {
   components: {
-    Movies
+    Navbar,
+    Trending,
+    SearchByTitle
   }
 }
 </script>
 
 <template>
-  <Movies />
+  <Navbar />
+
+  <main>
+    <RouterView />
+  </main>
 </template>
