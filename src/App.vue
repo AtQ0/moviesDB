@@ -5,7 +5,7 @@ import { RouterLink } from 'vue-router';
 import { useRouter } from 'vue-router';
 //Import other components as child components
 
-import Navbar from './components/Navbar.vue'
+import Navbar from './components/NavBar.vue'
 import Trending from './components/Trending.vue'
 import SearchBar from './components/SearchBar.vue'
 import MovieInfo from './components/MovieInfo.vue'
@@ -19,41 +19,74 @@ export default {
   },
   methods: {
 
-    //Method that recieves search-result custom event from navbar
-    onSearchBtnClick(e) {
-      console.log('incoming-search-result har tagits emot!')
-      // Parse the received string back to array of objects
-      const receivedData = JSON.parse(e);
-      console.log('Filmerna är', receivedData);
-
-      /*=== PASS recievedData AS PARAMS VIA ROUTE ===*/
-
-      //Create const for usingRoute
-      const router = useRouter();
-      //Push params to the router
-      router.push({ name: 'Home', params: { searchData: data } });
-
-
-    }
 
   },
   components: {
     Navbar,
     SearchBar,
-
-
+    Trending,
+    MovieInfo,
   }
 }
 </script>
 
+
+<style>
+/*============================*/
+/*========== FONTS ===========*/
+/*============================*/
+
+
+@font-face {
+  font-family: "SlateMedium";
+  src: url("../../assets/fonts/SlateMedium.TTF") format("opentype");
+  font-weight: medium;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "SlateReg";
+  src: url("../../assets/fonts/SlateRg.TTF") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+body {
+  font-family: SlateReg;
+  font-size: 14px;
+  background-color: #303A48;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+
+
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: SlateMedium;
+}
+
+
+#app {
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  justify-content: center;
+}
+</style>
+
 <template>
   <Navbar></Navbar>
-
-  <!--
-  <Navbar @incoming-search-result="onSearchBtnClick" />
 
   <main>
     <RouterView />
   </main>
--->
 </template>

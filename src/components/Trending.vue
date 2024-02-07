@@ -86,6 +86,8 @@ export default {
         showMovieInfo(incomingTrendingMovie) {
             console.log("yeah")
             console.log(incomingTrendingMovie)
+
+            this.$emit('movie-info', incomingTrendingMovie)
         },
 
     },
@@ -102,11 +104,12 @@ export default {
 
 <style scoped>
 .content-container {
-    padding-left: 10vw;
-    padding-right: 10vw;
+    padding-left: 6vw;
+    padding-right: 6vw;
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding-bottom: 40px;
 }
 
 .content-container h1 {
@@ -115,7 +118,7 @@ export default {
     margin-top: 0;
     font-size: 28px;
     margin-top: 30px;
-    margin-bottom: 60px;
+    margin-bottom: 40px;
 }
 
 .trending-movie-container {
@@ -128,13 +131,14 @@ export default {
 
 .trending-movie-wrapper {
     background-color: #50627B;
-    width: 300px;
+    width: 280px;
     display: flex;
     flex-direction: column;
     align-items: start;
     border-radius: 16px;
     overflow: hidden;
     cursor: pointer;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25)
 }
 
 .trending-movie-wrapper h2 {
@@ -152,8 +156,8 @@ export default {
 }
 
 .image-container-for-each-trending-movie img {
-    height: 400px;
-    width: 300px;
+    height: 380px;
+    width: 280px;
 }
 
 
