@@ -43,24 +43,49 @@ export default {
         formatVoteAverage(voteAverage) {
             const scoreStr = voteAverage.toString();
             const decimalIndex = scoreStr.indexOf('.');
-            return decimalIndex !== -1 ? scoreStr.slice(0, decimalIndex + 2) : scoreStr;
+            if (decimalIndex !== -1) {
+                // If there is a decimal part, return the score with one decimal
+                return scoreStr.slice(0, decimalIndex + 2);
+            } else {
+                // If it's a whole number, append '.0' to it
+                return scoreStr + '.0';
+            }
         },
 
+        //Method that simple fetches all genres on page load
         getGenresOnStart() {
             //Fetch trending movie on page reload, using Axios
             axios.get(`${this.genreUrl}${this.apiKey}`)
                 .then((response) => {
                     this.movieGenres = response.data.genres;
-                    console.log(this.movieGenres)
-
                 })
         },
 
+        //Match genres from each movie to the genre-list and send back 2 of 3 genres
         getGenres(genreIds) {
+            // Return empty string if either genreIds or movieGenres is not available
+            if (!genreIds || !this.movieGenres) return '';
+
+            const genres = [];
+            for (let i = 0; i < genreIds.length; i++) {
+                const id = genreIds[i];
+                // Find genre by id
+                const genre = this.movieGenres.find(genre => genre.id === id);
+                if (genre) {
+                    // Push genre name to genres array if found
+                    genres.push(genre.name);
+                }
+                // Exit loop if two genres are found
+                if (genres.length >= 2) break;
+            }
+            // Join genre names with commas
+            return genres.join(', ');
+        },
 
 
-
-
+        showMovieInfo(incomingTrendingMovie) {
+            console.log("yeah")
+            console.log(incomingTrendingMovie)
         },
 
     },
@@ -116,7 +141,12 @@ export default {
     margin-bottom: 0px;
 }
 
-.trending-movie-wrapper p {
+.first-p {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.last-p {
     margin-top: 0;
     margin-bottom: 30px;
 }
@@ -143,7 +173,8 @@ export default {
         <h1>Trending movies this week</h1>
         <div class="trending-movie-container">
 
-            <div v-for="trendingMovie in trendingMovies" class="trending-movie-wrapper">
+            <div @click="showMovieInfo(trendingMovie)" v-for="trendingMovie in trendingMovies"
+                class="trending-movie-wrapper">
 
                 <div class="image-container-for-each-trending-movie">
 
@@ -158,8 +189,8 @@ export default {
 
                 <h3 class="movie-year">{{ trendingMovie.release_date.slice(0, -6) }}</h3>
                 <h2 class="movie-title">{{ trendingMovie.title }}</h2>
-                <p> Imdb score: <b>{{ formatVoteAverage(trendingMovie.vote_average) }}</b></p>
-                <p>{{ getGenres(trendingMovie.genre_ids) }}</p>
+                <p class="first-p"> Imdb score: <b>{{ formatVoteAverage(trendingMovie.vote_average) }}</b></p>
+                <p class="last-p">Genre: {{ getGenres(trendingMovie.genre_ids) }}</p>
             </div>
 
         </div>

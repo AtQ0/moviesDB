@@ -12,7 +12,10 @@ export default createRouter({
         },
         {
             component: HomeView,
-            path: "/"
+            name: "Home",
+            path: "/",
+            //pass searchData as a prop
+            props: route => ({ searchData: route.params.searchData })
         }
     ]
 })
