@@ -4,9 +4,6 @@ import axios from 'axios';
 
 
 export default {
-
-
-
     data() {
         return {
             apiKey: "1a31fa90d843040a3cdee6b110b0fe4a",
@@ -198,6 +195,5 @@ export default {
             </div>
 
         </div>
-
     </div>
 </template>

@@ -9,7 +9,12 @@ export default {
         return {
             //Boolean triggered (true) by search-btn from Navbar-component
             areMoviesSearched: false,
+
+            //Boolean triggered (true) my click on movie
             isMovieClicked: false,
+
+            //Storing search results emmitted by SearchBar
+            searchResults: null,
         }
     },
     components: {
@@ -21,17 +26,18 @@ export default {
     methods: {
 
         //Recieves custom-event from SearchBar
-
         onSearchBtnClick(e) {
-
-            console.log('incoming-search-result har tagits emot!')
             // Parse the received string back to array of objects
             const receivedData = JSON.parse(e);
-            console.log('Filmerna är', receivedData);
 
+            //save params to local variable to prop it further
+            this.searchResults = receivedData;
+
+            //Toggle to show search result instead of trending movies
+            this.areMoviesSearched = true;
         },
 
-
+        //Recieves movie info
         showMovieInfo(e) {
             console.log('Filmen är', e)
         },
@@ -51,7 +57,7 @@ export default {
     <SearchBar @incoming-search-result="onSearchBtnClick"></SearchBar>
 
     <Trending @movie-info="showMovieInfo" v-if="!areMoviesSearched"></Trending>
-    <SearchResults v-else></SearchResults>
+    <SearchResults v-else :search-results="searchResults"></SearchResults>
 
     <MovieInfo v-if="isMovieClicked"></MovieInfo>
 </template>
