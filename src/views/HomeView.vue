@@ -3,6 +3,8 @@ import SearchBar from '../components/SearchBar.vue';
 import Trending from '../components/Trending.vue';
 import SearchResults from '../components/SearchResults.vue';
 import MovieInfo from '../components/MovieInfo.vue';
+import Swiper from '../components/Swiper.vue';
+
 
 export default {
     data() {
@@ -15,6 +17,7 @@ export default {
 
             //Storing search results emmitted by SearchBar
             searchResults: null,
+
         }
     },
     components: {
@@ -22,6 +25,12 @@ export default {
         Trending,
         SearchResults,
         MovieInfo,
+        Swiper,
+    },
+    created() {
+
+
+
     },
     methods: {
 
@@ -35,6 +44,7 @@ export default {
 
             //Toggle to show search result instead of trending movies
             this.areMoviesSearched = true;
+
         },
 
         //Recieves movie info
@@ -44,7 +54,14 @@ export default {
 
 
     },
+    props: {
 
+    },
+
+    watch: {
+
+
+    },
 }
 </script>
 
@@ -54,7 +71,10 @@ export default {
 
 
 <template>
-    <SearchBar @incoming-search-result="onSearchBtnClick"></SearchBar>
+    <Swiper></Swiper>
+
+
+    <!-- <SearchBar @incoming-search-result="onSearchBtnClick"></SearchBar> -->
 
     <Trending @movie-info="showMovieInfo" v-if="!areMoviesSearched"></Trending>
     <SearchResults v-else :search-results="searchResults"></SearchResults>

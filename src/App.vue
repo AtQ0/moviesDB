@@ -9,15 +9,18 @@ import Navbar from './components/NavBar.vue'
 import Trending from './components/Trending.vue'
 import SearchBar from './components/SearchBar.vue'
 import MovieInfo from './components/MovieInfo.vue'
+import HomeView from './views/HomeView.vue';
 
 
 export default {
   data() {
     return {
       isMovieClicked: false,
+
     }
   },
   methods: {
+
 
 
   },
@@ -26,6 +29,7 @@ export default {
     SearchBar,
     Trending,
     MovieInfo,
+    HomeView
   }
 }
 </script>
@@ -56,12 +60,9 @@ body {
   font-family: SlateReg;
   font-size: 14px;
   background-color: #303A48;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  margin: 0;
+  padding: 0;
   color: white;
-
-
 }
 
 h1,
@@ -70,16 +71,6 @@ h3,
 h4,
 h5 {
   font-family: SlateMedium;
-}
-
-
-#app {
-  width: 100vw;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  justify-content: center;
 }
 </style>
 

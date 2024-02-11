@@ -15,6 +15,7 @@ export default createRouter({
             component: HomeView,
             name: "Home",
             path: "/",
+
         }
     ]
 })

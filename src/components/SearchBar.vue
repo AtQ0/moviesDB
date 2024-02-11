@@ -1,6 +1,11 @@
 <script>
 // Import the Axios library, downloaded by npm
 import axios from 'axios';
+import Swiper from 'swiper';
+import 'swiper/swiper-bundle.css'; // Import Swiper styles
+
+
+
 
 export default {
 
@@ -59,6 +64,20 @@ export default {
 
     watch: {
 
+    },
+    mounted() {
+        // Initialize Swiper
+        const mySwiper = new Swiper('.swiper-container', {
+            // Add Swiper options here
+            loop: true,
+            pagination: {
+                el: '.swiper-pagination',
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+        });
     },
 
 
@@ -154,6 +173,10 @@ img {
 
 .error-container p {
     margin: 0;
+}
+
+.swiper-slide img {
+    width: 200px;
 }
 </style>
 
