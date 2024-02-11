@@ -114,7 +114,7 @@ export default {
     flex-direction: column;
     justify-content: flex-start;
     padding-bottom: 40px;
-    background-color: lightblue;
+
 }
 
 
@@ -136,7 +136,6 @@ export default {
     gap: 20px;
     row-gap: 40px;
     margin: 0;
-    background-color: red;
 }
 
 .trending-movie-wrapper {

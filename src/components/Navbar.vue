@@ -27,11 +27,15 @@ export default {
             //Toggle if user has logged in
             this.isUserLoggedIn = true;
 
-            //Change login and register for search and account
+            //Select elements from DOM
+            const navbarContiner = document.querySelector(".container");
             const loginAndRegisterContainer = document.querySelector(".login-and-register-container");
             const searchAndUserAccountContainer = document.querySelector(".search-and-user-account-container");
             const burgerContainer = document.querySelector(".burger-container");
 
+
+            navbarContiner.style.paddingTop = "10px";
+            navbarContiner.style.paddingBottom = "10px";
             loginAndRegisterContainer.style.display = "none";
             searchAndUserAccountContainer.style.display = "flex";
             burgerContainer.style.display = "block";
@@ -69,6 +73,8 @@ export default {
     top: 0px;
     z-index: 2;
     background-color: transparent;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2px);
 }
 
 .burger-and-other-container {
@@ -152,7 +158,6 @@ export default {
     text-align: center;
     position: absolute;
     z-index: -1;
-
 }
 
 .vue-part-of-title {
@@ -280,22 +285,42 @@ export default {
 }
 
 .search-and-user-account-container {
-    background-color: coral;
-    padding: 4px;
     display: flex;
+    justify-content: center;
+    align-items: center;
     display: none;
 }
 
 .search-svg-container {
-    background-color: blue;
-    width: 40px;
-    height: 40px;
+    height: fit-content;
+    margin-right: 2vw;
+    margin-top: 3px;
+    cursor: pointer;
 }
 
-.user-account-container {
-    background-color: green;
-    width: 40px;
-    height: 40px;
+
+.user-account-wrapper {
+    background-color: #50627B;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 28.5px;
+    height: 28.5px;
+    border-radius: 8vw;
+    font-size: 22px;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.8);
+    transition: color 0.35s;
+}
+
+.user-account-wrapper:hover {
+    color: rgba(255, 255, 255, 1);
+}
+
+.user-account-wrapper p {
+    margin: 0;
+    padding: 0;
 }
 
 
@@ -512,11 +537,17 @@ export default {
         <div class="search-and-user-account-container">
 
             <div class="search-svg-container">
-                hww
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none"
+                    stroke="#ffffffcc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
             </div>
 
             <div class="user-account-container">
-                jjje
+                <div class="user-account-wrapper">
+                    <p>A</p>
+                </div>
             </div>
 
         </div>
