@@ -1,1 +1,2 @@
-# A Vue.js template for Vite
+# A streaming movie platform
+This is an ongoing Vue Vite project that makes use of and API 
