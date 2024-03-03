@@ -1,37 +1,59 @@
 <script>
-// Import the Axios library, downloaded by npm
+import SearchBar from '../components/SearchBar.vue';
 import axios from 'axios';
 
 export default {
     data() {
         return {
             apiKey: "1a31fa90d843040a3cdee6b110b0fe4a",
-            //Stores results gotten from below prop (see created)
-            searchedMovieResults: null,
             baseImageUrl: 'https://image.tmdb.org/t/p/w500',
             genreUrl: 'https://api.themoviedb.org/3/genre/movie/list?api_key=',
             movieGenres: null, //Array for all genres
+            movies: null,
         }
+    },
+    components: {
+        SearchBar,
+
     },
     created() {
 
-        //Save incoming prop to local data-variable first time component loads
-        //This logic is replaced by immediate inside of watch below
-        // this.searchedMovieResults = this.searchResults;
-
-        //Call this method to get genres on start
+        //Collect genres on component creation
         this.getGenresOnStart();
 
     },
-    computed: {
-
-
-    },
     props: {
-        //Sent from SearchBar via Homeview
-        searchResults: { type: Array },
+        movieTitle: {
+            type: String,
+            required: true,
+        }
+
     },
     methods: {
+
+
+        //Method that simple fetches all genres on page load
+        getGenresOnStart() {
+            //Fetch trending movie on page reload, using Axios
+            axios.get(`${this.genreUrl}${this.apiKey}`)
+                .then((response) => {
+                    this.movieGenres = response.data.genres;
+                })
+        },
+
+        //Methods that gets serach results by using prop
+        viewSearchResults() {
+
+            //Fetch movies on btn-click, using Axios
+            axios.get(`https://api.themoviedb.org/3/search/movie?query=${this.movieTitle}&api_key=${this.apiKey}`)
+                .then((response) => {
+                    //Save gotten query to a variable called movies
+                    this.movies = response.data.results;
+                    console.log(this.movies)
+                })
+
+        },
+
 
         //Method to format imdb score to one decimal
         formatVoteAverage(voteAverage) {
@@ -46,20 +68,8 @@ export default {
             }
         },
 
-        //Method that simple fetches all genres on page load
-        getGenresOnStart() {
-            //Fetch trending movie on page reload, using Axios
-            axios.get(`${this.genreUrl}${this.apiKey}`)
-                .then((response) => {
-                    this.movieGenres = response.data.genres;
-                })
-        },
-
         //Match genres from each movie to the genre-list and send back 2 of 3 genres
         getGenres(genreIds) {
-
-
-
             // Return empty string if either genreIds or movieGenres is not available
             if (!genreIds || !this.movieGenres) return '';
 
@@ -79,77 +89,99 @@ export default {
             return genres.join(', ');
         },
 
-
     },
+
 
     watch: {
 
-        // Watch for changes to the searchResults prop
-        searchResults: {
-            handler(newValue, oldValue) {
-                // Update searchedMovieResults whenever searchResults prop changes
-                this.searchedMovieResults = newValue;
-            },
+        //Watch movieTitle prop for any change
+        movieTitle: {
+            //Execute watcher immediately when component is created
+            immediate: true,
 
-            immediate: true, // Execute the handler immediately when the component is created
-        },
+            //If new value, call  method to view search results
+            handler(newValue, oldValue) {
+                // Call viewSearchResults method whenever movieTitle changes
+                this.viewSearchResults();
+            }
+        }
 
     },
-
-
 }
+
 </script>
 
 
 <style scoped>
 .content-container {
-    padding-left: 6vw;
-    padding-right: 6vw;
+    padding-left: 3vw;
+    padding-right: 3vw;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    justify-content: flex-start;
     padding-bottom: 40px;
 }
 
+
 .content-container h1 {
-    text-align: center;
-    width: fit-content;
-    margin-top: 0;
+    width: 100%;
     font-size: 28px;
-    margin-top: 30px;
-    margin-bottom: 40px;
+    margin-top: 0px;
+    margin-bottom: 0;
+    padding-bottom: 0px;
+    text-align: center;
 }
 
-.search-results-container {
+.trending-movie-container {
     display: flex;
     justify-content: center;
+    width: fit-content;
     flex-wrap: wrap;
-    gap: 40px;
-    row-gap: 80px;
+    gap: 20px;
+    row-gap: 40px;
+    margin: 0;
 }
 
-.searched-movie-wrapper {
+.trending-movie-wrapper {
     background-color: #50627B;
-    width: 280px;
+    width: 200px;
     display: flex;
     flex-direction: column;
     align-items: start;
     border-radius: 16px;
     overflow: hidden;
     cursor: pointer;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25)
+    padding: 10px;
+    margin-top: 0;
 }
 
-.searched-movie-wrapper h2 {
+.trending-movie-wrapper h2 {
     margin-bottom: 0px;
+    font-size: 14px;
 }
 
-.image-container-for-each-searched-movie img {
-    height: 380px;
-    width: 280px;
+.trending-movie-wrapper h3 {
+    font-size: 14px;
 }
 
+.first-p {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 12px;
+}
 
+.last-p {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 12px;
+}
+
+.image-container-for-each-trending-movie img {
+    height: 250px;
+    width: 200px;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+}
 
 
 .movie-year {
@@ -161,26 +193,34 @@ export default {
     margin-top: 0;
 }
 
-.first-p {
-    margin-top: 0;
-    margin-bottom: 0;
-}
 
-.last-p {
-    margin-top: 0;
-    margin-bottom: 30px;
+@media screen and (min-width: 451px) {
+
+    .home-container p {
+        margin: 0;
+        font-size: 0.95rem;
+    }
+
+    .about-container p {
+        font-size: 0.95rem;
+
+    }
 }
 </style>
 
 
-
 <template>
-    <div class="content-container">
-        <h1>Search results</h1>
-        <div class="search-results-container">
-            <div v-for="movie in searchedMovieResults" class="searched-movie-wrapper">
+    <SearchBar></SearchBar>
 
-                <div class="image-container-for-each-searched-movie">
+    <div class="content-container">
+
+
+
+        <div class="trending-movie-container">
+            <h1>SEARCH RESULTS</h1>
+            <div v-for="movie in movies" class="trending-movie-wrapper">
+
+                <div class="image-container-for-each-trending-movie">
 
                     <!--Show movie poster if existing-->
                     <img v-if="movie.poster_path !== null" :src="this.baseImageUrl + movie.poster_path" alt="Movie Poster">

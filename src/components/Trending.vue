@@ -1,11 +1,41 @@
+<template>
+    <div class="content-container">
+
+        <h1>Trending movies this week</h1>
+
+        <div class="trending-movie-container">
+
+            <div @click="showMovieInfo(trendingMovie)" v-for="trendingMovie in trendingMovies"
+                class="trending-movie-wrapper">
+
+                <div class="image-container-for-each-trending-movie">
+
+                    <!--Show movie poster if existing-->
+                    <img v-if="trendingMovie.poster_path !== null" :src="this.baseImageUrl + trendingMovie.poster_path"
+                        alt="Movie Poster">
+
+                    <!--Show generic movie poster if poster is missing-->
+                    <img v-else src="../../assets/images/missingMovie.jpg" alt="">
+
+                </div>
+
+                <h3 class="movie-year">{{ trendingMovie.release_date.slice(0, -6) }}</h3>
+                <h2 class="movie-title">{{ trendingMovie.title }}</h2>
+                <p class="first-p"> Imdb score: <b>{{ formatVoteAverage(trendingMovie.vote_average) }}</b></p>
+                <p class="last-p">Genre: {{ getGenres(trendingMovie.genre_ids) }}</p>
+            </div>
+
+        </div>
+    </div>
+</template>
+
+
 <script>
 // Import the Axios library, downloaded by npm
 import axios from 'axios';
-// import Swiper bundle with all modules installed
-import Swiper from 'swiper/bundle';
 
-// import styles bundle
-import 'swiper/css/bundle';
+//Import a Router for use
+import router from '../router'
 
 
 export default {
@@ -86,10 +116,14 @@ export default {
 
 
         showMovieInfo(incomingTrendingMovie) {
-            console.log("yeah")
-            console.log(incomingTrendingMovie)
+
+            const movieId = incomingTrendingMovie.id;
+
+            // Navigate to the movie page with the movie's ID as a route parameter
+            router.push({ name: 'Movie', params: { movieId: movieId } });
 
             this.$emit('movie-info', incomingTrendingMovie)
+            console.log("wanya", incomingTrendingMovie)
         },
 
     },
@@ -119,12 +153,11 @@ export default {
 
 
 .content-container h1 {
-
     width: 100%;
     font-size: 28px;
     margin-top: 30px;
     margin-bottom: 0;
-    padding-bottom: 0;
+    padding-bottom: 20px;
     justify-self: left;
 }
 
@@ -203,77 +236,3 @@ export default {
     }
 }
 </style>
-
-
-<template>
-    <div class="content-container">
-
-        <h1>Trending movies this week</h1>
-
-
-        <template>
-            <div class="content-container">
-                <h1>Trending movies this week</h1>
-                <!-- Slider main container -->
-                <div class="trending-swiper-container swiper-container">
-                    <!-- Additional required wrapper -->
-                    <div class="swiper-wrapper">
-                        <!-- Slides -->
-                        <div class="swiper-slide"><img src="../../assets/images/movie1.jpg" alt=""></div>
-                        <div class="swiper-slide"><img src="../../assets/images/movie2.jpg" alt=""></div>
-                        <div class="swiper-slide"><img src="../../assets/images/movie3.jpg" alt=""></div>
-                        <div class="swiper-slide"><img src="../../assets/images/movie1.jpg" alt=""></div>
-                        <div class="swiper-slide"><img src="../../assets/images/movie2.jpg" alt=""></div>
-                        <div class="swiper-slide"><img src="../../assets/images/movie3.jpg" alt=""></div>
-                    </div>
-                    <!-- If we need pagination -->
-                    <div class="swiper-pagination"></div>
-                    <!-- If we need navigation buttons -->
-                    <div class="swiper-button-prev"></div>
-                    <div class="swiper-button-next"></div>
-                </div>
-                <div class="trending-movie-container">
-                    <div @click="showMovieInfo(trendingMovie)" v-for="trendingMovie in trendingMovies"
-                        class="trending-movie-wrapper">
-                        <div class="image-container-for-each-trending-movie">
-                            <!--Show movie poster if existing-->
-                            <img v-if="trendingMovie.poster_path !== null"
-                                :src="this.baseImageUrl + trendingMovie.poster_path" alt="Movie Poster">
-                            <!--Show generic movie poster if poster is missing-->
-                            <img v-else src="../../assets/images/missingMovie.jpg" alt="">
-                        </div>
-                        <h3 class="movie-year">{{ trendingMovie.release_date.slice(0, -6) }}</h3>
-                        <h2 class="movie-title">{{ trendingMovie.title }}</h2>
-                        <p class="first-p"> Imdb score: <b>{{ formatVoteAverage(trendingMovie.vote_average) }}</b></p>
-                        <p class="last-p">Genre: {{ getGenres(trendingMovie.genre_ids) }}</p>
-                    </div>
-                </div>
-            </div>
-        </template>
-
-
-        <div class="trending-movie-container">
-
-            <div @click="showMovieInfo(trendingMovie)" v-for="trendingMovie in trendingMovies"
-                class="trending-movie-wrapper">
-
-                <div class="image-container-for-each-trending-movie">
-
-                    <!--Show movie poster if existing-->
-                    <img v-if="trendingMovie.poster_path !== null" :src="this.baseImageUrl + trendingMovie.poster_path"
-                        alt="Movie Poster">
-
-                    <!--Show generic movie poster if poster is missing-->
-                    <img v-else src="../../assets/images/missingMovie.jpg" alt="">
-
-                </div>
-
-                <h3 class="movie-year">{{ trendingMovie.release_date.slice(0, -6) }}</h3>
-                <h2 class="movie-title">{{ trendingMovie.title }}</h2>
-                <p class="first-p"> Imdb score: <b>{{ formatVoteAverage(trendingMovie.vote_average) }}</b></p>
-                <p class="last-p">Genre: {{ getGenres(trendingMovie.genre_ids) }}</p>
-            </div>
-
-        </div>
-    </div>
-</template>

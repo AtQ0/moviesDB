@@ -1,22 +1,20 @@
 <script>
 // Import the Axios library, downloaded by npm
 import axios from 'axios';
-import Swiper from 'swiper';
-import 'swiper/swiper-bundle.css'; // Import Swiper styles
 
-
+//Import a Router for use
+import router from '../router'
 
 
 export default {
 
     data() {
         return {
-            apiKey: "1a31fa90d843040a3cdee6b110b0fe4a",
-            pageIntroParagraph: 'FIND MOVIES TO WATCH',
-            introImage: "/assets/images/background.jpg",
             searchInputValue: "",
-            movies: null,
         }
+    },
+    component: {
+
     },
     created() {
 
@@ -29,56 +27,25 @@ export default {
     methods: {
 
 
-        getMovieBySearching() {
+        linkToPageSearchResults() {
 
-            if (this.searchInputValue === "") {
-                alert("input field is empty")
-            }
-            //get api-data on btn-click
-            else {
+            // Replace spaces with + signs before pushing it to the adress field via router
+            const formattedSearchInput = this.searchInputValue.replace(/\s+/g, '+');
 
-                //Fetch movies on btn-click, using Axios
-                axios.get(`https://api.themoviedb.org/3/search/movie?query=${this.searchInputValue}&api_key=${this.apiKey}`)
-                    .then((response) => {
-                        //Save gotten query to a variable called movies
-                        this.movies = response.data.results;
+            // Navigate to the movie page with the movie's ID as a route parameter
+            router.push({ name: 'SearchResults', params: { movieTitle: formattedSearchInput } });
 
-                        //Clear inputfield after it has been used
-                        this.searchInputValue = "";
+            //Clear inputfield after it has been used
+            this.searchInputValue = "";
 
-                        //Call method to emit info to father component
-                        this.sendMoviesToBeShown();
-                    })
-            }
         },
-
-        //Method that emits data to father component
-        sendMoviesToBeShown() {
-            const dataString = JSON.stringify(this.movies); // Convert array of objects to string
-
-            this.$emit('incoming-search-result', dataString)
-        }
-
 
     },
 
     watch: {
 
     },
-    mounted() {
-        // Initialize Swiper
-        const mySwiper = new Swiper('.swiper-container', {
-            // Add Swiper options here
-            loop: true,
-            pagination: {
-                el: '.swiper-pagination',
-            },
-            navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-            },
-        });
-    },
+
 
 
 }
@@ -88,112 +55,186 @@ export default {
 
 <style scoped>
 .container {
+    padding-top: 60px;
+    padding-bottom: 10px;
+    height: 15vw;
+    max-height: 130px;
     display: flex;
-    width: fit-content;
+    justify-content: center;
+    align-items: center;
+}
+
+.search-and-filter-container {
+    width: 100vw;
+    height: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.searchbar-input-container {
+    width: 50%;
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 100vw;
 }
 
-.pageIntroParagraph {
-    display: flex;
-    justify-content: center;
-    width: fit-content;
-    position: absolute;
-    color: white;
-    font-size: 18px;
-}
-
-.image-container {
-    max-width: 400px;
-    width: 80vw;
-    height: 80vw;
-    max-height: 350px;
-    margin-top: 20px;
-    margin-bottom: 30px;
-    position: relative;
-    cursor: pointer;
-    border-radius: 26px;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.85));
-}
-
-img {
+.searchbar-input-container input {
+    background-color: rgba(80, 98, 123, 0.2);
+    border: solid 2px #719edd;
+    height: 6vw;
     width: 100%;
-    height: 100%;
-    contain: cover;
-
-}
-
-.movieTitleInput {
-    width: 65vw;
-    max-width: 330px;
-    height: 35px;
-    padding-left: 15px;
-    border-radius: 8px;
-    background-color: #50627B;
+    max-height: 30px;
+    border-radius: 6px;
     color: white;
-    font-size: 1.2rem;
-    border: none;
-
+    font-size: 4vw;
+    padding-left: 10px;
 }
 
-.movieTitleInput::placeholder {
-    color: #ffffff;
-    opacity: 1;
-}
-
-.search-button {
+.search-filter-container {
+    width: 100%;
+    max-width: 300px;
     margin-top: 15px;
-    margin-bottom: 30px;
-    height: 40px;
-    width: 150px;
-    border-radius: 8px;
-    background-color: #67AD7C;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 2.5vw;
+}
+
+.year-filter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: fit-content;
+    margin-left: 2px;
     cursor: pointer;
-    transition: background-color 0.1s;
-    border: none;
-    font-size: 1.2rem;
-    color: white;
 }
 
-.search-button:hover {
-    background-color: #588157;
-}
-
-.error-container {
-    height: 20px;
-    width: 75%;
-    font-size: 10px;
-    visibility: hidden;
-}
-
-.error-container p {
+.year-filter p {
     margin: 0;
+    padding: 0;
 }
 
-.swiper-slide img {
-    width: 200px;
+.year-filter-svg-container {
+    display: flex;
+    align-items: center;
+}
+
+.genre-filter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: fit-content;
+    cursor: pointer;
+}
+
+.genre-filter p {
+    margin: 0;
+    padding: 0;
+}
+
+.genre-filter-svg-container {
+    display: flex;
+    align-items: center;
+}
+
+.score-filter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: fit-content;
+    cursor: pointer;
+}
+
+.score-filter p {
+    margin: 0;
+    padding: 0;
+}
+
+.score-filter-svg-container {
+    display: flex;
+    align-items: center;
+}
+
+
+
+@media screen and (min-width: 451px) {
+
+    .searchbar-input-container input {
+        font-size: 18px;
+    }
+
+    .search-filter-container {
+        font-size: 11.5px;
+    }
+
+    .searchbar-input-container {
+        align-items: flex-start;
+    }
+
+    .search-filter-container {
+        justify-content: flex-start;
+    }
+
+    .genre-filter {
+        margin-left: 28px;
+    }
+
+    .score-filter {
+        margin-left: 28px;
+    }
 }
 </style>
 
 
 <template>
-    <!--Nav/menu-->
     <div class="container">
-        <div class="image-container">
-            <p class="pageIntroParagraph"><b>{{ pageIntroParagraph }}</b></p>
-            <img :src="introImage" />
-        </div>
-        <input class="movieTitleInput" type="text" placeholder="What are you looking for?" v-model="searchInputValue"
-            @keydown.enter="getMovieBySearching" />
 
-        <div class="error-container">
-            <p>*Please write the name of the title you are searching for.</p>
+        <div class="search-and-filter-container">
+            <div class="searchbar-input-container">
+                <input type="text" placeholder="Type your title here" v-model="searchInputValue"
+                    @keyup.enter="linkToPageSearchResults">
+
+                <div class="search-filter-container">
+
+                    <div class="year-filter">
+                        <div class="year-title-container">
+                            <p>YEAR</p>
+                        </div>
+                        <div class="year-filter-svg-container">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                stroke="#ffffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M6 9l6 6 6-6" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="genre-filter">
+                        <div class="genre-title-container">GENRE</div>
+                        <div class="genre-filter-svg-container">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                stroke="#ffffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M6 9l6 6 6-6" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="score-filter">
+                        <div class="imdb-title-container">IMDB SCORE</div>
+                        <div class="score-filter-svg-container">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                stroke="#ffffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M6 9l6 6 6-6" />
+                            </svg>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
         </div>
-        <button class="search-button" @click="getMovieBySearching">SEARCH</button>
     </div>
 </template>

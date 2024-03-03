@@ -1,16 +1,12 @@
 <script>
-import SearchBar from '../components/SearchBar.vue';
-import Trending from '../components/Trending.vue';
-import SearchResults from '../components/SearchResults.vue';
-import MovieInfo from '../components/MovieInfo.vue';
 import Swiper from '../components/Swiper.vue';
+import Trending from '../components/Trending.vue';
+
 
 
 export default {
     data() {
         return {
-            //Boolean triggered (true) by search-btn from Navbar-component
-            areMoviesSearched: false,
 
             //Boolean triggered (true) my click on movie
             isMovieClicked: false,
@@ -21,11 +17,9 @@ export default {
         }
     },
     components: {
-        SearchBar,
-        Trending,
-        SearchResults,
-        MovieInfo,
         Swiper,
+        Trending,
+
     },
     created() {
 
@@ -42,16 +36,14 @@ export default {
             //save params to local variable to prop it further
             this.searchResults = receivedData;
 
-            //Toggle to show search result instead of trending movies
-            this.areMoviesSearched = true;
-
         },
 
-        //Recieves movie info
-        showMovieInfo(e) {
-            console.log('Filmen är', e)
-        },
+        forwardCustomEvent(incomingTrendingMovie) {
+            // Emit the custom event using Vue's event system
 
+            console.log("yaaa", incomingTrendingMovie)
+            this.$root.$emit("movie-info", incomingTrendingMovie);
+        }
 
     },
     props: {
@@ -73,11 +65,5 @@ export default {
 <template>
     <Swiper></Swiper>
 
-
-    <!-- <SearchBar @incoming-search-result="onSearchBtnClick"></SearchBar> -->
-
-    <Trending @movie-info="showMovieInfo" v-if="!areMoviesSearched"></Trending>
-    <SearchResults v-else :search-results="searchResults"></SearchResults>
-
-    <MovieInfo v-if="isMovieClicked"></MovieInfo>
+    <Trending @movie-info="forwardCustomEvent"></Trending>
 </template>

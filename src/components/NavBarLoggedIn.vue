@@ -3,6 +3,13 @@
     <!--Nav/menu-->
     <div class="container">
 
+        <div class="logged-in-title-container">
+            <h1 @click="linkToPageHome"><span class="vue-part-of-title">{{ pageTitleVue }}</span><span
+                    class="last-part-of-title">{{
+                        pageTitleMovieDb
+                    }}</span></h1>
+        </div>
+
 
         <div class="burger-and-other-container">
             <div class="burger-container">
@@ -11,54 +18,51 @@
                 <div class="rectC"></div>
             </div>
 
-            <div @click="linkToPageHome" class="mobile-title-container">
-                <h1><span class="vue-part-of-title">{{ pageTitleVue }}</span><span class="last-part-of-title">{{
-                    pageTitleMovieDb
-                }}</span></h1>
-            </div>
-
-
             <div class="genre-container">
-                <div class="must-see-wrapper"><b>Must see</b></div>
-                <div class="movies-wrapper"><b>Movies</b></div>
-                <div class="series-wrapper"><b>Series</b></div>
-                <div class="family-wrapper"><b>Family</b></div>
-                <div class="faq-wrapper"><b>FAQ</b></div>
-                <div class="prices-wrapper"><b>Prices</b></div>
+                <div class="movies-wrapper">
+                    <router-link to="/movies" class="router-link-custom"><b>Movies</b></router-link>
+                </div>
+                <div class="series-wrapper">
+                    <router-link to="/series" class="router-link-custom"><b>Series</b></router-link>
+                </div>
             </div>
         </div>
 
+        <div class="search-and-user-account-container">
 
+            <div @click="linkToPageSearch" class="search-svg-container">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none"
+                    stroke="#ffffffcc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+            </div>
 
-        <div class="login-and-register-container">
-
-            <div @click="linkToPageUser" class="login-wrapper"><b>LOGIN</b></div>
-
-            <div class="register-btn-container">
-                <button><b>REGISTER</b></button>
+            <div class="user-account-container">
+                <div class="user-account-wrapper">
+                    <p>A</p>
+                </div>
             </div>
 
         </div>
-
     </div>
 </template>
 
 <script>
 //Import a Router for use
 import router from '../router'
+//Importer a RouterLink for setting up a router
+import { RouterLink } from 'vue-router';
 
 
 export default {
     data() {
         return {
-
             pageTitleVue: 'Vue',
             pageTitleMovieDb: 'Movies',
-            isUserLoggedIn: false,
         }
     },
     created() {
-
 
 
     },
@@ -68,21 +72,14 @@ export default {
     },
     methods: {
 
-        linkToPageUser() {
-
-            //Toggle if user has logged in
-            this.isUserLoggedIn = true;
-
-            //Emit that user is logged in to change Navbar
-            this.$emit('user-logged-in', this.isUserLoggedIn)
-
-            // Use router.push to navigate to page /user
-            router.push('/user');
+        linkToPageHome() {
+            // Use router.push to navigate to page Home
+            router.push('/');
         },
 
-        linkToPageHome() {
-            // Use router.push to navigate to page /user
-            router.push('/');
+        linkToPageSearch() {
+            // Use router.push to navigate to page Search
+            router.push('/search')
         },
 
     },
@@ -98,10 +95,21 @@ export default {
 
 
 <style scoped>
+.router-link-custom {
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.8);
+    transition: color 0.35s;
+}
+
+.router-link-custom:hover {
+    color: rgba(255, 255, 255, 1.0);
+}
+
+
 .container {
     width: 100vw;
-    padding-top: 5px;
-    padding-bottom: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -186,6 +194,21 @@ export default {
     margin: 0;
 }
 
+.logged-in-title-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: absolute;
+    z-index: -1;
+}
+
+.logged-in-title-container h1 {
+    cursor: pointer;
+}
+
 .vue-part-of-title {
     background-color: transparent;
     color: #67AD7C;
@@ -208,107 +231,48 @@ export default {
     display: none;
 }
 
-.must-see-wrapper {
+.search-and-user-account-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 3vw;
+    z-index: 5;
+}
+
+.search-svg-container {
+    height: fit-content;
+    margin-right: 2vw;
+    margin-top: 3px;
     cursor: pointer;
-    color: rgba(255, 255, 255, 0.8);
-    transition: color 0.35s;
 }
 
-.must-see-wrapper:hover {
-    color: rgba(255, 255, 255, 1.0);
-}
 
-.movies-wrapper {
-    cursor: pointer;
-    color: rgba(255, 255, 255, 0.8);
-    transition: color 0.35s;
-}
-
-.movies-wrapper:hover {
-    color: rgba(255, 255, 255, 1.0);
-}
-
-.series-wrapper {
-    cursor: pointer;
-    color: rgba(255, 255, 255, 0.8);
-    transition: color 0.35s;
-}
-
-.series-wrapper:hover {
-    color: rgba(255, 255, 255, 1.0);
-}
-
-.family-wrapper {
-    cursor: pointer;
-    color: rgba(255, 255, 255, 0.8);
-    transition: color 0.35s;
-}
-
-.family-wrapper:hover {
-    color: rgba(255, 255, 255, 1.0);
-}
-
-.faq-wrapper {
-    cursor: pointer;
-    color: rgba(255, 255, 255, 0.8);
-    transition: color 0.35s;
-}
-
-.faq-wrapper:hover {
-    color: rgba(255, 255, 255, 1.0);
-}
-
-.prices-wrapper {
-    cursor: pointer;
-    color: rgba(255, 255, 255, 0.8);
-    transition: color 0.35s;
-}
-
-.prices-wrapper:hover {
-    color: rgba(255, 255, 255, 1.0);
-}
-
-.login-and-register-container {
+.user-account-wrapper {
+    background-color: #50627B;
+    border: solid 2px #719edd;
     display: flex;
     align-items: center;
-}
-
-.login-wrapper {
-    color: rgba(255, 255, 255, 0.8);
-    height: fit-content;
-    margin-right: 15px;
-    margin-left: 15px;
-    transition: color 0.35s;
+    justify-content: center;
+    text-align: center;
+    width: 28.5px;
+    height: 28.5px;
+    border-radius: 8vw;
+    font-size: 22px;
     cursor: pointer;
-    visibility: hidden;
+    color: rgba(255, 255, 255, 0.8);
+    transition: color 0.35s;
 }
 
-.login-wrapper:hover {
+.user-account-wrapper:hover {
     color: rgba(255, 255, 255, 1);
 }
 
-.register-btn-container {
-    margin-right: 3vw;
+.user-account-wrapper p {
+    margin: 0;
+    padding: 0;
 }
 
-.register-btn-container button {
-    background-color: #50627B;
-    font-family: SlateReg;
-    font-size: 3vw;
-    color: rgba(255, 255, 255, 0.8);
-    transition: background-color 0.75s, color 0.35s;
-    width: 21vw;
-    border-radius: 4vw;
-    padding: 8px;
-    border: none;
-    cursor: pointer;
-}
 
-.register-btn-container button:hover {
-    background-color: rgba(255, 255, 255, 0.8);
-    color: #67AD7C;
-
-}
 
 @media screen and (min-width: 451px) {
     .mobile-title-container h1 {
@@ -322,21 +286,9 @@ export default {
         padding-bottom: 0.2vw;
     }
 
-    .burger-container {
-        margin-left: 15px;
-    }
-
-    .register-btn-container {
-        margin-right: 15px;
-    }
-
 }
 
 @media screen and (min-width: 501px) {
-    .register-btn-container button {
-        font-size: 15px;
-        width: 105px;
-    }
 
     .mobile-title-container h1 {
         padding-bottom: 0.25vw;
@@ -383,18 +335,6 @@ export default {
     }
 }
 
-@media screen and (min-width: 622px) {
-    .login-wrapper {
-        visibility: visible;
-    }
-
-    .container {
-        padding-top: 0;
-        padding-bottom: 0;
-    }
-}
-
-
 @media screen and (min-width: 650px) {
     .mobile-title-container h1 {
         padding-bottom: 0.55vw;
@@ -428,10 +368,6 @@ export default {
     .genre-container div {
         display: block;
     }
-
-    .burger-container {
-        display: none;
-    }
 }
 
 @media screen and (min-width: 750px) {
@@ -450,24 +386,12 @@ export default {
     .genre-container div {
         font-size: 18px;
     }
-
-    .login-wrapper {
-        font-size: 18px;
-    }
-
-    .register-btn-container button {
-        font-size: 18px;
-    }
 }
 
 @media screen and (min-width: 1100px) {
 
     .mobile-title-container h1 {
         padding-bottom: 9px;
-    }
-
-    .burger-container {
-        margin-left: 0;
     }
 
     .mobile-title-container {

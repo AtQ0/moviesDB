@@ -1,6 +1,4 @@
 <script>
-// Import the Axios library, downloaded by npm
-import axios from 'axios';
 // import Swiper bundle with all modules installed
 import Swiper from 'swiper/bundle';
 
@@ -23,8 +21,6 @@ export default {
 
     },
     methods: {
-
-
 
 
 
@@ -58,7 +54,7 @@ export default {
                 disableOnInteraction: false, // Prevent autoplay from stopping on user interaction
             },
             // Speed (milliseconds)
-            speed: 1000, // Adjust the speed as needed (e.g., 800 milliseconds)
+            speed: 2000, // Adjust the speed as needed (e.g., 800 milliseconds)
 
             // Transition effect
             effect: 'fade', // Choose the desired transition effect (e.g., 'slide', 'fade', 'cube', 'flip', etc.)
